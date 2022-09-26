@@ -6,6 +6,7 @@ import {
   signOut,
   onAuthStateChanged,
   OAuthProvider,
+  getIdToken,
 } from "firebase/auth";
 import { auth } from "../firebase";
 
@@ -13,7 +14,13 @@ const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
-
+  const [idToken, setIdToken] = useState(null);
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const token = await getIdToken(user);
+      setIdToken(token);
+    }
+  });
   const appleSignIn = async () => {
     const appleProvider = new OAuthProvider("apple.com");
     console.log("here");
@@ -38,7 +45,9 @@ export const AuthContextProvider = ({ children }) => {
     };
   }, []);
   return (
-    <AuthContext.Provider value={{ googleSignIn, logOut, user, appleSignIn }}>
+    <AuthContext.Provider
+      value={{ googleSignIn, logOut, user, appleSignIn, idToken }}
+    >
       {children}
     </AuthContext.Provider>
   );

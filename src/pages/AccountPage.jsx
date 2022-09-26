@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { UserAuth } from "../context/AuthContext";
 
 export default function AccountPage() {
-  const { logOut, user } = UserAuth();
+  const { logOut, user, idToken } = UserAuth();
   useEffect(() => {
     if (user) {
       console.log(user);
@@ -24,6 +24,7 @@ export default function AccountPage() {
         <span>{user?.displayName}</span>
       </div>
       <div>{user?.email}</div>
+      <div>{idToken && idToken}</div>
       <button onClick={handleSignOut}>Logout</button>
     </div>
   );
