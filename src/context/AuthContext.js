@@ -15,6 +15,7 @@ const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
   const [idToken, setIdToken] = useState(null);
+  const [loginBy, setLoginBy] = useState(null);
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       const token = await getIdToken(user);
@@ -22,6 +23,7 @@ export const AuthContextProvider = ({ children }) => {
     }
   });
   const appleSignIn = async () => {
+    setLoginBy("apple");
     const appleProvider = new OAuthProvider("apple.com");
     console.log("here");
     await signInWithPopup(auth, appleProvider);
@@ -41,10 +43,12 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   const onGoogleSignIn = (user) => {
+    console.log(user);
     setIdToken(null);
     let userCred = user.credential;
     let payload = jwt_decode(userCred);
     setUser(payload);
+    setLoginBy("google");
   };
 
   return (
@@ -55,6 +59,7 @@ export const AuthContextProvider = ({ children }) => {
         appleSignIn,
         idToken,
         onGoogleSignIn,
+        loginBy,
       }}
     >
       {children}

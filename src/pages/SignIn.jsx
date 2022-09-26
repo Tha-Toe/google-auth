@@ -6,6 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
 import "./signIn.css";
 
+const CLIENT_ID =
+  "555618407648-lkittruvsnt5jr327s088990pgv3bi9t.apps.googleusercontent.com";
+const SCOPE = "https://www.googleapis.com/auth/calendar";
+
 export default function SignIn() {
   const { user, appleSignIn, onGoogleSignIn } = UserAuth();
   const navigate = useNavigate();
@@ -24,15 +28,14 @@ export default function SignIn() {
   }, [user]);
 
   const googleButtonRef = useRef(null);
+  const [tokenClient, setTokenClient] = useState(null);
 
   useScript("https://accounts.google.com/gsi/client", () => {
     window.google.accounts.id.initialize({
-      client_id:
-        "555618407648-lkittruvsnt5jr327s088990pgv3bi9t.apps.googleusercontent.com",
+      client_id: CLIENT_ID,
       callback: onGoogleSignIn,
       auto_select: false,
     });
-
     window.google.accounts.id.renderButton(googleButtonRef.current, {
       size: "medium",
     });
@@ -40,7 +43,10 @@ export default function SignIn() {
 
   return (
     <div className="signInContainer">
-      <div ref={googleButtonRef}></div>
+      <div className="google-container">
+        <div ref={googleButtonRef} style={{ opacity: "0", zIndex: "10" }}></div>
+        <div className="google-button">Log in with google</div>
+      </div>
       <button className="apple-button" onClick={handleAppleLogin}>
         Log in with apple
       </button>

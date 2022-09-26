@@ -9,14 +9,7 @@ import Protected from "./components/Protected";
 
 function App() {
   return (
-    <div
-      style={{
-        width: "100vw",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
+    <div>
       <AuthContextProvider>
         <NavBar />
         <Routes>
