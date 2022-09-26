@@ -1,6 +1,5 @@
 import { useContext, createContext, useEffect, useState } from "react";
 import {
-  GoogleAuthProvider,
   signInWithPopup,
   signInWithRedirect,
   signOut,
@@ -9,6 +8,7 @@ import {
   getIdToken,
 } from "firebase/auth";
 import { auth } from "../firebase";
+import jwt_decode from "jwt-decode";
 
 const AuthContext = createContext();
 
@@ -26,15 +26,10 @@ export const AuthContextProvider = ({ children }) => {
     console.log("here");
     await signInWithPopup(auth, appleProvider);
   };
-  const googleSignIn = () => {
-    const provider = new GoogleAuthProvider();
-
-    //signInWithRedirect(auth, provider);
-    signInWithPopup(auth, provider);
-  };
 
   const logOut = () => {
     signOut(auth);
+    setUser(null);
   };
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -44,9 +39,23 @@ export const AuthContextProvider = ({ children }) => {
       unsubscribe();
     };
   }, []);
+
+  const onGoogleSignIn = (user) => {
+    setIdToken(null);
+    let userCred = user.credential;
+    let payload = jwt_decode(userCred);
+    setUser(payload);
+  };
+
   return (
     <AuthContext.Provider
-      value={{ googleSignIn, logOut, user, appleSignIn, idToken }}
+      value={{
+        logOut,
+        user,
+        appleSignIn,
+        idToken,
+        onGoogleSignIn,
+      }}
     >
       {children}
     </AuthContext.Provider>
