@@ -1,8 +1,14 @@
 import React from "react";
+import { useEffect } from "react";
 import { UserAuth } from "../context/AuthContext";
 
 export default function AccountPage() {
   const { logOut, user } = UserAuth();
+  useEffect(() => {
+    if (user) {
+      console.log(user);
+    }
+  }, [user]);
   const handleSignOut = async () => {
     try {
       await logOut();
@@ -17,6 +23,7 @@ export default function AccountPage() {
         <span>Welcome,</span>
         <span>{user?.displayName}</span>
       </div>
+      <div>{user?.email}</div>
       <button onClick={handleSignOut}>Logout</button>
     </div>
   );
