@@ -46,18 +46,18 @@ export const AuthContextProvider = ({ children }) => {
       unsubscribe();
     };
   }, []);
-  const getTokenFunc = () => {
-    let tokenClientLet = window.google.accounts.oauth2.initTokenClient({
-      client_id: CLIENT_ID,
-      scope: SCOPE,
-      prompt: "",
-      callback: (res) => {
-        console.log(res);
-        // setAccessToken(res.access_token);
-      },
-    });
-    tokenClientLet.requestAccessToken();
-  };
+  // const getTokenFunc = () => {
+  //   let tokenClientLet = window.google.accounts.oauth2.initTokenClient({
+  //     client_id: CLIENT_ID,
+  //     scope: SCOPE,
+  //     prompt: "",
+  //     callback: (res) => {
+  //       console.log(res);
+  //       // setAccessToken(res.access_token);
+  //     },
+  //   });
+  //   tokenClientLet.requestAccessToken();
+  // };
   const onGoogleSignIn = (user) => {
     console.log(user);
     setIdToken(null);
@@ -66,7 +66,7 @@ export const AuthContextProvider = ({ children }) => {
     let payload = jwt_decode(userCred);
     setUser(payload);
     setLoginByGoogle(true);
-    getTokenFunc();
+    // getTokenFunc();
   };
 
   return (
