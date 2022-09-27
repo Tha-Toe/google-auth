@@ -5,7 +5,7 @@ const CLIENT_ID =
   "555618407648-lkittruvsnt5jr327s088990pgv3bi9t.apps.googleusercontent.com";
 const SCOPE = "https://www.googleapis.com/auth/calendar";
 export default function AccountPage() {
-  const { logOut, user, idToken, loginBy, jwt } = UserAuth();
+  const { logOut, user, idToken, loginByGoogle, jwt } = UserAuth();
   useEffect(() => {
     if (user) {
       console.log(user);
@@ -22,6 +22,7 @@ export default function AccountPage() {
     let tokenClientLet = window.google.accounts.oauth2.initTokenClient({
       client_id: CLIENT_ID,
       scope: SCOPE,
+      prompt: "",
       callback: (res) => {
         console.log(res);
         setAccessToken(res.access_token);
@@ -29,8 +30,15 @@ export default function AccountPage() {
     });
     tokenClientLet.requestAccessToken();
   };
+  // useEffect(() => {
+  //   if (loginByGoogle) {
+  //     setTimeout(() => {
+  //       getTokenFunc();
+  //     }, [3000]);
+  //   }
+  // }, [loginByGoogle]);
   const [accessToken, setAccessToken] = useState(null);
-  if (loginBy === "google") {
+  if (loginByGoogle) {
     return (
       <div>
         <h1>Account</h1>
