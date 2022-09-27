@@ -9,7 +9,7 @@ import Protected from "./components/Protected";
 
 function App() {
   return (
-    <div>
+    <div style={{ maxWidth: "100vw" }}>
       <AuthContextProvider>
         <NavBar />
         <Routes>

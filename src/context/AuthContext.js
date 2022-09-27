@@ -16,6 +16,7 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
   const [idToken, setIdToken] = useState(null);
   const [loginBy, setLoginBy] = useState(null);
+  const [jwt, setJwt] = useState(null);
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       const token = await getIdToken(user);
@@ -46,6 +47,7 @@ export const AuthContextProvider = ({ children }) => {
     console.log(user);
     setIdToken(null);
     let userCred = user.credential;
+    setJwt(userCred);
     let payload = jwt_decode(userCred);
     setUser(payload);
     setLoginBy("google");
@@ -60,6 +62,7 @@ export const AuthContextProvider = ({ children }) => {
         idToken,
         onGoogleSignIn,
         loginBy,
+        jwt,
       }}
     >
       {children}
